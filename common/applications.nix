@@ -19,6 +19,8 @@
     };
   };
 
+  programs.adb.enable = true;
+
   services.flatpak.enable = true;
 
   environment.systemPackages = with pkgs; [

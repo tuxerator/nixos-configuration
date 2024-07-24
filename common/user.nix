@@ -21,7 +21,7 @@ in
     users.users.${cfg.user.username} = {
       uid = 1000;
       isNormalUser = true;
-      extraGroups = [ "wheel" ];
+      extraGroups = [ "wheel" "adbusers" ];
       description = cfg.user.name;
       shell = cfg.user.shell;
     };
