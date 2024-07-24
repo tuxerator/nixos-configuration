@@ -6,11 +6,11 @@
 
 {
   imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      ./packages.nix
-      ./desktop-environment.nix
-      ./steam.nix
+    [
+      # Include the results of the hardware scan.
+      ./carrie-hardware-configuration.nix
+      ./common
+      ./gaming.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -27,8 +27,21 @@
     };
   };
 
+  hyprland.enable = true;
+  awesome.enable = true;
+
+  # System user
+  user = {
+    name = "Jakob Sanowski";
+    username = "jakob";
+    email = "jakob.sanowski@knime.com";
+    phone = "+49 1523 1875485";
+  };
+
+  host.name = "carrie";
+
   nix = {
-    settings.experimental-features = [ "nix-command" "flakes"];
+    settings.experimental-features = [ "nix-command" "flakes" ];
     package = pkgs.nixFlakes;
     extraOptions = ''
       experimental-features = nix-command flakes
@@ -39,32 +52,6 @@
     WLR_NO_HARDWARE_CURSORS = "1";
   };
 
-  services.udev.packages = [ pkgs.yubikey-personalization ];
-
-  # Core programs
-  programs = {
-    zsh.enable = true;
-    neovim.enable = true;
-    gnupg.agent = {
-      enable = true;
-      enableSSHSupport = true;
-    };
-  };
-
-  # User config
-  users.mutableUsers = true;
-  users.defaultUserShell = pkgs.zsh;
-
-  # System users
-  users.users.jakob = {
-    description = "System admin and owner";
-    isNormalUser = true;
-    home = "/home/jakob";
-    createHome = true;
-    extraGroups = [ "wheel" ];
-    shell = pkgs.zsh;
-  };
-  
   # networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -72,40 +59,6 @@
 
   # Set your time zone.
   time.timeZone = "Europe/Berlin";
-
-  # Configure network proxy if necessary
-  # networking.proxy.default = "http://user:password@proxy:port/";
-  # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
-  # Select internationalisation properties.
-  i18n = {
-    defaultLocale = "en_DK.UTF-8";
-  };
-      
-  console = {
-    font = "Lat2-Terminus16";
-    useXkbConfig = true;
-  };
-
-  services.xserver = {
-    enable = true;
-    xkb = {
-      layout = "us";
-      variant = "altgr-intl";
-    };
-  };
-
-  fonts = {
-    packages = with pkgs; [
-      (nerdfonts.override { fonts = [ "Meslo" "Hack" ]; })
-    ];
-    fontconfig.defaultFonts = {
-      monospace = [ "Hack Nerd Font" ];
-    };
-  };
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
 
   # Enable sound.
   security.rtkit.enable = true;
@@ -116,21 +69,19 @@
     pulse.enable = true;
   };
 
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
+    enable32Bit = true;
   };
 
   hardware.nvidia = {
     modesetting.enable = true;
     open = false;
-    nvidiaSettings =true;
+    nvidiaSettings = true;
     package = config.boot.kernelPackages.nvidiaPackages.stable;
   };
 
   # List services that you want to enable:
-  services.flatpak.enable = true;
   services.xserver.videoDrivers = [ "nvidia" ];
 
   # Enable the OpenSSH daemon.
