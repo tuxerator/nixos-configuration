@@ -38,6 +38,8 @@ in
 
     programs.hyprlock.enable = lib.mkIf cfg.hyprland.enable true;
 
+    programs.kdeconnect.enable = true;
+
     xdg.portal.extraPortals = [
       pkgs.xdg-desktop-portal-gtk
     ];
