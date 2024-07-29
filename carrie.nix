@@ -84,6 +84,27 @@
   # List services that you want to enable:
   services.xserver.videoDrivers = [ "nvidia" ];
 
+  networking.firewall.allowedUDPPorts = [ 51820 ];
+
+  # Wireguard
+  networking.wireguard.interfaces = {
+    fritzBox = {
+      ips = [ "192.169.178.202/32" ];
+      listenPort = 51820;
+      privateKeyFile = "/private/wireguard_key";
+      generatePrivateKeyFile = true;
+      peers = [
+        {
+          publicKey = "z71Szz/jxisgBHrjFFgNqkzmLdymm2b9eIr+x535Qgc=";
+          presharedKeyFile = "/private/wireguard_psk";
+          allowedIPs = [ "192.169.178.0/24" ];
+          endpoint = "tv3fpy7ff3l1otkz.myfritz.net:50479";
+          persistentKeepalive = 25;
+        }
+      ];
+    };
+  };
+
   # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
