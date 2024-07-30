@@ -90,7 +90,7 @@
   # Wireguard
   networking.wireguard.interfaces = {
     fritzBox = {
-      ips = [ "192.169.178.203/24" ];
+      ips = [ "192.169.178.203/32" ];
       listenPort = 51820;
       privateKeyFile = "/private/wireguard_key";
       generatePrivateKeyFile = true;
