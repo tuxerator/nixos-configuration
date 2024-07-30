@@ -90,13 +90,13 @@
   # Wireguard
   networking.wireguard.interfaces = {
     fritzBox = {
-      ips = [ "192.169.178.202/32" ];
+      ips = [ "192.169.178.203/24" ];
       listenPort = 51820;
       privateKeyFile = "/private/wireguard_key";
       generatePrivateKeyFile = true;
       peers = [
         {
-          publicKey = "z71Szz/jxisgBHrjFFgNqkzmLdymm2b9eIr+x535Qgc=";
+          publicKey = "JnTQBfPLs+6U8H3KSod/276TGhTXG5SkL0NNSMQu8h8=";
           presharedKeyFile = "/private/wireguard_psk";
           allowedIPs = [ "192.169.178.0/24" ];
           endpoint = "tv3fpy7ff3l1otkz.myfritz.net:50479";
