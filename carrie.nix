@@ -93,7 +93,6 @@
       ips = [ "192.169.178.203/24" ];
       listenPort = 51820;
       privateKeyFile = "/private/wireguard_key";
-      generatePrivateKeyFile = true;
       peers = [
         {
           publicKey = "JnTQBfPLs+6U8H3KSod/276TGhTXG5SkL0NNSMQu8h8=";
