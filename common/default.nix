@@ -12,6 +12,7 @@ in
     ./networking.nix
     ./nix.nix
     ./user.nix
+    ./greetd.nix
   ];
 
   nixpkgs.config.allowUnfree = true;

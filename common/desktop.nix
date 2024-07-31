@@ -4,10 +4,6 @@ let
   cfg = config;
 in
 {
-  imports = [
-    ./greetd.nix
-  ];
-
   options = {
     hyprland.enable = lib.mkOption {
       default = true;
@@ -20,7 +16,7 @@ in
   };
 
   config = {
-    services.xserver = lib.mkIf (cfg.hyprland.enable || cfg.awesome.enable) {
+    services.xserver = lib.mkIf cfg.awesome.enable {
       enable = true;
       # displayManager.gdm = {
       #   enable = true;
