@@ -14,7 +14,7 @@ in
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.sway}/bin/sway --unsupported-gpu --config ${sway-config}";
+        command = "${pkgs.gamescope}/bin/gamescope -- ${pkgs.greetd.regreet}/bin/regreet";
       };
     };
   };
