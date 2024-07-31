@@ -5,11 +5,8 @@
     enable = true;
     settings = {
       default_session = {
-        command = "${pkgs.greetd.greetd}/bin/agreety --cmd Hyprland";
-        user = "greeter";
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time";
       };
     };
   };
-
-  services.displayManager.enable = true;
 }
