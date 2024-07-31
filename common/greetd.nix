@@ -2,7 +2,7 @@
 let
 
   sway-config = pkgs.writeText "sway-config" ''
-    exec "${lib.getExe config.programs.regreet.package}; ${pkgs.sway}/bin/swaymsg exit"
+    exec "${lib.getExe pkgs.greetd.regreet}; swaymsg exit"
     bindsym Mod4+shift+e exec swaynag \
       -t warning \
       -m 'What do you want to do?' \
@@ -20,8 +20,5 @@ in
         command = "${lib.getExe pkgs.sway} --config ${sway-config}";
       };
     };
-  };
-  programs.regreet = {
-    enable = true;
   };
 }
