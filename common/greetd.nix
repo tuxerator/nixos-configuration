@@ -9,7 +9,6 @@ let
       -b 'Poweroff' 'systemctl poweroff' \
       -b 'Reboot' 'systemctl reboot'
 
-    include /etc/sway/config.d/*
   '';
 in
 {
