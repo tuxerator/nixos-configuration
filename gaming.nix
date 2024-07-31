@@ -3,6 +3,8 @@
 {
   programs.steam = {
     enable = true;
-    gamescopeSession.enable = true;
   };
+  environment.systemPackages = [
+    pkgs.gamescope
+  ];
 }
