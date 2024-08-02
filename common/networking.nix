@@ -19,6 +19,10 @@ in
       publish.addresses = true;
     };
 
+    # barrier
+    networking.firewall = {
+      allowedTCPPorts = [ 24801 ];
+    };
 
     # Permissions
     users.users.${cfg.user.username}.extraGroups = [ "networkmanager" ];

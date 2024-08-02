@@ -18,9 +18,9 @@ in
   config = {
     services.xserver = lib.mkIf cfg.awesome.enable {
       enable = true;
-      # displayManager.gdm = {
-      #   enable = true;
-      # };
+      displayManager.gdm = {
+        enable = true;
+      };
       windowManager.awesome.enable = cfg.awesome.enable;
     };
 
