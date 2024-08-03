@@ -58,6 +58,7 @@ in
         variant = "altgr-intl";
       };
     };
+    udisks2.enable = true;
   };
 
   fonts = {
