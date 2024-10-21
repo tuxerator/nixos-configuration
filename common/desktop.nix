@@ -18,10 +18,8 @@ in
   config = {
     services.xserver = lib.mkIf cfg.awesome.enable {
       enable = true;
-      displayManager.gdm = {
-        enable = true;
-      };
-      windowManager.awesome.enable = cfg.awesome.enable;
+      windowManager.awesome.enable = true;
+      displayManager.startx.enable = true;
     };
 
     services.libinput = {
@@ -47,5 +45,11 @@ in
     environment.systemPackages = with pkgs; [
       wl-clipboard-rs
     ];
+
+
+    environment.sessionVariables = {
+      NIXOS_OZONE_WL = "1";
+      OGL_DEDICATED_HW_STATE_PER_CONTEXT = "ENABLE_ROBUST";
+    };
   };
 }

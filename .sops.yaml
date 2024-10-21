@@ -1,0 +1,10 @@
+keys:
+  - &yubikey 441E73A6BD435845CC8E3398F660F94761BC2864
+  - &carrie_root age17rk5cmw0acxll0qq2afwqzx2sanu9hx80n7dpe3rsan0dutfcfsq09xpvx
+creation_rules:
+  - path_regex: secrets/secrets.yaml$
+    key_groups:
+      - pgp:
+        - *yubikey
+        age:
+        - *carrie_root

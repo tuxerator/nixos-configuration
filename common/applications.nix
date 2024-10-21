@@ -30,6 +30,7 @@
     htop
     unzip
     nss
+    sops
   ];
   environment.defaultPackages = [ ];
 }

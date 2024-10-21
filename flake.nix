@@ -8,9 +8,17 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    musnix = { url = "github:musnix/musnix"; };
+
   };
 
-  outputs = { self, nixpkgs, home-manager, ... }@inputs: {
+  outputs = { self, nixpkgs, home-manager, sops-nix, musnix, ... }@inputs: {
     nixosConfigurations = {
       "carrie" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -19,6 +27,14 @@
         ];
       };
 
+      "carrie2" = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          musnix.nixosModules.musnix
+          sops-nix.nixosModules.sops
+          ./carrie2.nix
+        ];
+      };
       "knime-thickPad" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
