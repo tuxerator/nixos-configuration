@@ -2,8 +2,10 @@
 let cfg = config;
 in
 {
-  musnix = {
-    enable = false;
-    alsaSeq.enable = true;
-  };
+  security.pam.loginLimits = [
+    { domain = "@audio"; item = "memlock"; type = "-"; value = "unlimited"; }
+    { domain = "@audio"; item = "rtprio"; type = "-"; value = "99"; }
+  ];
+
+  services.pipewire.jack.enable = true;
 }

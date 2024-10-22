@@ -14,6 +14,7 @@ in
     ./user.nix
     ./greetd.nix
     ./ssh.nix
+    ./audio.nix
   ];
 
   nixpkgs.config.allowUnfree = true;
