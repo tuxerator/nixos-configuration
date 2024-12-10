@@ -31,6 +31,7 @@
     unzip
     nss
     sops
+    cachix
   ];
   environment.defaultPackages = [ ];
 }

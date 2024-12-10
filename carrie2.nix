@@ -40,7 +40,7 @@
 
   nix = {
     settings.experimental-features = [ "nix-command" "flakes" ];
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.latest;
   };
 
   time.timeZone = "Europe/Berlin";

@@ -18,6 +18,7 @@ in
   ];
 
   nixpkgs.config.allowUnfree = true;
+  nix.settings.trusted-users = [ "@wheel" "jakob" "root" ];
 
   # Use grub EFI boot loader.
   boot.loader = {
@@ -75,7 +76,8 @@ in
 
   fonts = {
     packages = with pkgs; [
-      (nerdfonts.override { fonts = [ "Meslo" "Hack" ]; })
+      nerd-fonts.meslo-lg
+      nerd-fonts.hack
     ];
     fontconfig.defaultFonts = {
       monospace = [ "Hack Nerd Font" ];

@@ -8,4 +8,9 @@ in
   ];
 
   services.pipewire.jack.enable = true;
+
+  environment.systemPackages = with pkgs; [
+    coppwr
+    whisper
+  ];
 }
