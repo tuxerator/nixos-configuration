@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config;
@@ -19,10 +19,9 @@ in
       publish.addresses = true;
     };
 
-    # barrier
-    networking.firewall = {
-      allowedTCPPorts = [ 24801 ];
-    };
+    environment.systemPackages = with pkgs; [
+      networkmanager-openvpn
+    ];
 
     # Permissions
     users.users.${cfg.user.username}.extraGroups = [ "networkmanager" ];

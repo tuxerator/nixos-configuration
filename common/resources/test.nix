@@ -5,5 +5,5 @@ let
   palette = import ./palette.nix { inherit lib; };
 in
 {
-  test = palette.ansiFormat.cyan;
+  test = (palette.ansiFormat.cyan "hello");
 }

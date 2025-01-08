@@ -19,7 +19,7 @@ rec {
       (color "└───${pad "─" ""}───┘")
     ]);
 
-  printableLength = text: fold add 0 (map (v: if isList v then 0 else stringLength v) (split "\\[[^m]*m" text));
+  printableLength = text: fold add 0 (map (v: if isList v then 0 else stringLength v) (split "\\[[^m]*m" text));
 
   printablePad = width: placeholder: text: text + replicate (width - printableLength text) placeholder;
 }

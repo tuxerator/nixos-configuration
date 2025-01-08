@@ -46,7 +46,7 @@ asHex // rec {
     in
     base // { bold = effect "1"; dim = effect "2" // { italic = effect "2;3"; }; italic = effect "3"; };
 
-  ansiFormat = mapAttrsRecursive (_: a: t: "e[${a}m${t}e[0m") ansi;
+  ansiFormat = mapAttrsRecursive (_: a: t: "[${a}m${t}[0m") ansi;
 
   asFloat = mapAttrs (_: cs: map (c: c / 255.0) cs) asInt;
 

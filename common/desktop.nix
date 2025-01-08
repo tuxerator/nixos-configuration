@@ -12,16 +12,9 @@ in
       type = lib.types.bool;
     };
 
-    awesome.enable = lib.mkEnableOption "awesome";
   };
 
   config = {
-    services.xserver = lib.mkIf cfg.awesome.enable {
-      enable = true;
-      windowManager.awesome.enable = true;
-      displayManager.startx.enable = true;
-    };
-
     services.libinput = {
       enable = true;
       mouse = {
@@ -31,12 +24,11 @@ in
 
     programs.hyprland = lib.mkIf cfg.hyprland.enable {
       enable = true;
-      xwayland.enable = true;
+      xwayland.enable = false;
     };
 
     programs.hyprlock.enable = lib.mkIf cfg.hyprland.enable true;
 
-    programs.kdeconnect.enable = true;
 
     xdg.portal.extraPortals = [
       pkgs.xdg-desktop-portal-gtk
