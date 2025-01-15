@@ -17,8 +17,23 @@ in
     ./audio.nix
   ];
 
-  nixpkgs.config.allowUnfree = true;
+  nixpkgs = {
+    config.allowUnfree = true;
+    overlays = [
+      (self: super: {
+        linux-rt_latest = pkgs.linuxPackagesFor (pkgs.linuxPackages_latest.kernel.override {
+          structuredExtraConfig = with lib.kernel; {
+            PREEMPT_RT = yes;
+            PREEMPT_VOLUNTARY = lib.mkForce no;
+          };
+          ignoreConfigErrors = true;
+        });
+      })
+    ];
+  };
   nix.settings.trusted-users = [ "@wheel" "jakob" "root" ];
+
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Use grub EFI boot loader.
   boot.loader = {

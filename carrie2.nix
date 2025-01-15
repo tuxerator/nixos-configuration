@@ -14,7 +14,6 @@
 
   host.name = "carrie2";
 
-  awesome.enable = true;
   hyprland.enable = true;
 
   environment.sessionVariables = {

@@ -11,17 +11,9 @@ in
       example = false;
       type = lib.types.bool;
     };
-
-    awesome.enable = lib.mkEnableOption "awesome";
   };
 
   config = {
-    services.xserver = lib.mkIf cfg.awesome.enable {
-      enable = true;
-      windowManager.awesome.enable = true;
-      displayManager.startx.enable = true;
-    };
-
     services.libinput = {
       enable = true;
       mouse = {
