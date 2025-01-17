@@ -16,6 +16,7 @@ in
     ./ssh.nix
     ./audio.nix
     ./pia.nix
+    ./printer.nix
   ];
 
   nixpkgs = {
@@ -49,15 +50,14 @@ in
       enableCryptodisk = true;
     };
   };
-  boot.plymouth.enable = true;
   boot.initrd.preDeviceCommands = with palette.ansiFormat; ''
-    info $'\n'${lib.escapeShellArg (frame magenta ''
+    echo $'\n'${(lib.escapeShellArg (frame magenta ''
     ${magenta "If found, please contact:"}
 
     ${cyan "Name:"} ${config.user.name}
     ${cyan "Email:"} ${config.user.email}
     ${cyan "Phone:"} ${config.user.phone}
-    '')}$'\n'
+    ''))}$'\n'
   '';
 
 
@@ -88,6 +88,15 @@ in
       };
     };
     udisks2.enable = true;
+  };
+
+  xdg.terminal-exec = {
+    enable = true;
+    settings = {
+      default = [
+        "alacritty.desktop"
+      ];
+    };
   };
 
   fonts = {

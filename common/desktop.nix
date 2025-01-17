@@ -25,7 +25,7 @@ in
       package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
       portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
       enable = true;
-      xwayland.enable = true;
+      xwayland.enable = false;
     };
 
     nix.settings = {
@@ -35,7 +35,6 @@ in
 
     programs.hyprlock.enable = lib.mkIf cfg.hyprland.enable true;
 
-    programs.kdeconnect.enable = true;
 
     xdg.portal.extraPortals = [
       pkgs.xdg-desktop-portal-gtk

@@ -10,6 +10,7 @@
       ./carrie2-hardware-config.nix
       ./common
       ./gaming.nix
+      ./secrets
     ];
 
   host.name = "carrie2";
@@ -27,12 +28,6 @@
     email = "jakob.sanowski@sanbach.de";
     phone = "+49 1523 1875485";
   };
-
-  sops.defaultSopsFile = ./secrets/secrets.yaml;
-  sops.defaultSopsFormat = "yaml";
-
-  sops.age.keyFile = "/var/lib/sops-nix/carrie-root.txt";
-  sops.age.generateKey = true;
 
   sops.secrets."wireguard/private_key" = { };
   sops.secrets."wireguard/preshared_key" = { };
