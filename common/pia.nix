@@ -13,7 +13,6 @@
     persist-key
     persist-tun
     cipher aes-256-gcm
-    ncp-disable
     tls-client
     remote-cert-tls server
 
@@ -21,13 +20,9 @@
     p1070600
     ${config.sops.placeholder."openvpn/password"}
     </auth-user-pass>
-    compress
+    comp-lzo no
     verb 1
     reneg-sec 0
-
-    <crl-verify> 
-    ${config.sops.placeholder."openvpn/crl"}
-    </crl-verify>
 
     <ca>
     ${config.sops.placeholder."openvpn/ca"}
@@ -37,7 +32,7 @@
   '';
   services.openvpn.servers = {
     pia = {
-      autoStart = true;
+      autoStart = false;
       config = "config ${config.sops.templates."swiss-udp.ovpn".path}";
     };
   };

@@ -15,6 +15,7 @@ in
     ./greetd.nix
     ./ssh.nix
     ./audio.nix
+    ./pia.nix
   ];
 
   nixpkgs = {
