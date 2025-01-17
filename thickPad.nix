@@ -5,14 +5,12 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports =
-    [
-      # Include the results of the hardware scan.
-      ./thickPad-hardware-configuration.nix
-      ./common
-      ./secrets
-    ];
-
+  imports = [
+    # Include the results of the hardware scan.
+    ./thickPad-hardware-configuration.nix
+    ./common
+    ./secrets
+  ];
 
   # System user
   user = {
@@ -28,7 +26,7 @@
 
   nix = {
     settings.experimental-features = [ "nix-command" "flakes" ];
-    package = pkgs.nixFlakes;
+    package = pkgs.nixVersions.stable;
   };
 
   security.rtkit.enable = true;
@@ -37,9 +35,9 @@
     pulse.enable = true;
   };
 
-
   hardware.graphics = {
     enable = true;
+    enable32Bit = true;
     extraPackages = with pkgs; [
       intel-ocl
       intel-compute-runtime
@@ -73,15 +71,11 @@
     };
   };
 
-  services.logind = {
-    lidSwitch = "suspend-then-hibernate";
-  };
+  services.logind = { lidSwitch = "suspend-then-hibernate"; };
 
   boot = {
     resumeDevice = "/dev/disk/by-uuid/776407ff-ca72-4d3d-8a04-314411e2b694";
-    kernelParams = [
-      "resume_offset=10347575"
-    ];
+    kernelParams = [ "resume_offset=10347575" ];
   };
 
   systemd.sleep.extraConfig = "HibernateDelaySec=1h";
