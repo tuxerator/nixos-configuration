@@ -3,8 +3,7 @@
 let
   inherit (import ./resources/lib.nix { inherit lib; }) frame;
   palette = import ./resources/palette.nix { inherit lib; };
-in
-{
+in {
   imports = [
     ./applications.nix
     ./desktop.nix
@@ -17,25 +16,16 @@ in
     ./audio.nix
     ./pia.nix
     ./printer.nix
+    ./virtual-cam.nix
   ];
 
   nixpkgs = {
-    config.allowUnfree = true;
-    overlays = [
-      (self: super: {
-        linux-rt_latest = pkgs.linuxPackagesFor (pkgs.linuxPackages_latest.kernel.override {
-          structuredExtraConfig = with lib.kernel; {
-            PREEMPT_RT = yes;
-            PREEMPT_VOLUNTARY = lib.mkForce no;
-          };
-          ignoreConfigErrors = true;
-        });
-      })
-    ];
+    config = {
+      allowUnfree = true;
+      cudaSupport = true;
+    };
   };
   nix.settings.trusted-users = [ "@wheel" "jakob" "root" ];
-
-  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Use grub EFI boot loader.
   boot.loader = {
@@ -51,29 +41,27 @@ in
     };
   };
   boot.initrd.preDeviceCommands = with palette.ansiFormat; ''
-    echo $'\n'${(lib.escapeShellArg (frame magenta ''
-    ${magenta "If found, please contact:"}
+    echo $'\n'${
+      (lib.escapeShellArg (frame magenta ''
+        ${magenta "If found, please contact:"}
 
-    ${cyan "Name:"} ${config.user.name}
-    ${cyan "Email:"} ${config.user.email}
-    ${cyan "Phone:"} ${config.user.phone}
-    ''))}$'\n'
+        ${cyan "Name:"} ${config.user.name}
+        ${cyan "Email:"} ${config.user.email}
+        ${cyan "Phone:"} ${config.user.phone}
+      ''))
+    }$'\n'
   '';
 
-
-  boot.extraModulePackages = with config.boot.kernelPackages; [
-    v4l2loopback
-  ];
+  boot.extraModulePackages = with config.boot.kernelPackages; [ v4l2loopback ];
   boot.extraModprobeConfig = ''
     options v4l2loopback devices=1 video_nr=1 card_label="OBS Cam" exclusive_caps=1
   '';
   security.polkit.enable = true;
+  security.soteria.enable = true;
 
   # Locale settings
   time.timeZone = "Europe/Berlin";
-  i18n = {
-    defaultLocale = "en_DK.UTF-8";
-  };
+  i18n = { defaultLocale = "en_DK.UTF-8"; };
 
   console = {
     font = "Lat2-Terminus16";
@@ -92,20 +80,11 @@ in
 
   xdg.terminal-exec = {
     enable = true;
-    settings = {
-      default = [
-        "alacritty.desktop"
-      ];
-    };
+    settings = { default = [ "alacritty.desktop" ]; };
   };
 
   fonts = {
-    packages = with pkgs; [
-      nerd-fonts.meslo-lg
-      nerd-fonts.hack
-    ];
-    fontconfig.defaultFonts = {
-      monospace = [ "Hack Nerd Font" ];
-    };
+    packages = with pkgs; [ nerd-fonts.meslo-lg nerd-fonts.hack ];
+    fontconfig.defaultFonts = { monospace = [ "Hack Nerd Font" ]; };
   };
 }

@@ -1,18 +1,34 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   programs = {
-    git = { enable = true; };
+    git = {
+      enable = true;
+    };
 
-    zsh = { enable = true; };
+    zsh = {
+      enable = true;
+    };
 
     nix-ld = {
       enable = true;
-      libraries = with pkgs; [ bash nss ];
+      libraries = with pkgs; [
+        bash
+        nss
+      ];
     };
   };
 
   programs.adb.enable = true;
+  programs.ausweisapp = {
+    enable = true;
+    openFirewall = true;
+  };
 
   services.flatpak.enable = true;
   services.gnome.gnome-keyring.enable = true;
@@ -27,6 +43,8 @@
     cachix
     libsecret
     config.boot.kernelPackages.perf
+    kdePackages.partitionmanager
+    nvtopPackages.nvidia
   ];
   environment.defaultPackages = [ ];
 }

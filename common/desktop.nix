@@ -1,9 +1,7 @@
 { config, lib, pkgs, inputs, ... }:
 
-let
-  cfg = config;
-in
-{
+let cfg = config;
+in {
   options = {
     hyprland.enable = lib.mkOption {
       default = true;
@@ -16,34 +14,32 @@ in
   config = {
     services.libinput = {
       enable = true;
-      mouse = {
-        accelProfile = "flat";
-      };
+      mouse = { accelProfile = "flat"; };
     };
 
     programs.hyprland = lib.mkIf cfg.hyprland.enable {
-      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-      portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+      package =
+        inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+      portalPackage =
+        inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
       enable = true;
-      xwayland.enable = false;
+      xwayland.enable = true;
+      withUWSM = true;
     };
 
     nix.settings = {
       substituters = [ "https://hyprland.cachix.org" ];
-      trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
+      trusted-public-keys = [
+        "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="
+      ];
     };
 
-    programs.hyprlock.enable = lib.mkIf cfg.hyprland.enable true;
+    xdg.portal = {
+      extraPortals = with pkgs; [ xdg-desktop-portal-gtk ];
+      xdgOpenUsePortal = true;
+    };
 
-
-    xdg.portal.extraPortals = [
-      pkgs.xdg-desktop-portal-gtk
-    ];
-
-    environment.systemPackages = with pkgs; [
-      wl-clipboard-rs
-    ];
-
+    environment.systemPackages = with pkgs; [ wl-clipboard-rs ];
 
     environment.sessionVariables = {
       NIXOS_OZONE_WL = "1";

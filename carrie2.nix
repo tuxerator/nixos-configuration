@@ -1,17 +1,21 @@
 # Edit this configuration file to define what should be installed on
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  imports =
-    [
-      # Include the results of the hardware scan.
-      ./carrie2-hardware-config.nix
-      ./common
-      ./gaming.nix
-      ./secrets
-    ];
+  imports = [
+    # Include the results of the hardware scan.
+    ./carrie2-hardware-config.nix
+    ./common
+    ./gaming.nix
+    ./secrets
+  ];
 
   host.name = "carrie2";
 
@@ -20,6 +24,12 @@
   environment.sessionVariables = {
     WLR_NO_HARDWARE_CURSORS = "1";
   };
+
+  programs.virt-manager.enable = true;
+  users.groups.libvirtd.members = ["jakob"];
+  virtualisation.libvirtd.enable = true;
+  virtualisation.spiceUSBRedirection.enable = true;
+
 
   # System user
   user = {
@@ -33,7 +43,10 @@
   sops.secrets."wireguard/preshared_key" = { };
 
   nix = {
-    settings.experimental-features = [ "nix-command" "flakes" ];
+    settings.experimental-features = [
+      "nix-command"
+      "flakes"
+    ];
     package = pkgs.nixVersions.latest;
   };
 
@@ -51,45 +64,96 @@
     graphics = {
       enable = true;
       enable32Bit = true;
+      extraPackages = with pkgs; [
+        cudaPackages.cudatoolkit
+        cudaPackages.cuda_cccl
+        cudaPackages.cuda_opencl
+        ocl-icd
+      ];
     };
     nvidia = {
       modesetting.enable = true;
-      powerManagement.enable = true;
+      powerManagement.enable = false;
       open = true;
       nvidiaSettings = true;
       package = config.boot.kernelPackages.nvidiaPackages.stable;
     };
   };
 
+  systemd.services.nvidia-control-devices = {
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig.ExecStart = "${config.boot.kernelPackages.nvidiaPackages.stable.bin}/bin/nvidia-smi";
+  };
+
   services.xserver.videoDrivers = [ "nvidia" ];
 
   fileSystems = {
-    "/".options = [ "compress=zstd" "noatime" ];
-    "/home".options = [ "compress=zstd" "noatime" ];
-    "/nix".options = [ "compress=zstd" "noatime" ];
+    "/".options = [
+      "compress=zstd"
+      "noatime"
+    ];
+    "/home".options = [
+      "compress=zstd"
+      "noatime"
+    ];
+    "/nix".options = [
+      "compress=zstd"
+      "noatime"
+    ];
   };
 
   # networking.hostName = "nixos"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
-  networking.firewall.allowedUDPPorts = [ 51820 ];
+
+  networking.firewall.allowedUDPPorts = [
+    51820
+    5353
+  ];
+  networking.firewall.allowedTCPPortRanges = [
+    {
+      from = 5959;
+      to = 5969;
+    }
+    {
+      from = 6960;
+      to = 6970;
+    }
+    {
+      from = 7960;
+      to = 7970;
+    }
+  ];
+  networking.firewall.allowedUDPPortRanges = [
+    {
+      from = 5959;
+      to = 5969;
+    }
+    {
+      from = 6960;
+      to = 6970;
+    }
+    {
+      from = 7960;
+      to = 7970;
+    }
+  ];
 
   networking.wireguard.interfaces = {
-    fritzBox = {
-      ips = [ "192.169.178.202/24" ];
-      listenPort = 51820;
-      privateKeyFile = "${config.sops.secrets."wireguard/private_key".path}";
-      peers = [
-        {
-          publicKey = "dyyEgF+GJVpmVBEkgs8hB4KxzXTjsoWBvJekX93qFGE=";
-          presharedKeyFile = "${config.sops.secrets."wireguard/preshared_key".path}";
-          allowedIPs = [ "192.169.178.0/24" ];
-          endpoint = "tv3fpy7ff3l1otkz.myfritz.net:55642";
-          persistentKeepalive = 25;
-        }
-      ];
-    };
+    # fritzBox = {
+    #   ips = [ "192.169.178.202/24" ];
+    #   listenPort = 51820;
+    #   privateKeyFile = "${config.sops.secrets."wireguard/private_key".path}";
+    #   peers = [{
+    #     publicKey = "dyyEgF+GJVpmVBEkgs8hB4KxzXTjsoWBvJekX93qFGE=";
+    #     presharedKeyFile =
+    #       "${config.sops.secrets."wireguard/preshared_key".path}";
+    #     allowedIPs = [ "192.169.178.0/24" ];
+    #     endpoint = "tv3fpy7ff3l1otkz.myfritz.net:55642";
+    #     persistentKeepalive = 25;
+    #   }];
+    # };
   };
 
   # Set your time zone.
@@ -109,9 +173,6 @@
 
   # Enable the X11 windowing system.
   # services.xserver.enable = true;
-
-
-
 
   # Configure keymap in X11
   # services.xserver.xkb.layout = "us";
@@ -192,4 +253,3 @@
   system.stateVersion = "24.11"; # Did you read the comment?
 
 }
-

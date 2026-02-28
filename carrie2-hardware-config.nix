@@ -4,50 +4,47 @@
 { config, lib, pkgs, modulesPath, ... }:
 
 {
-  imports =
-    [
-      (modulesPath + "/installer/scan/not-detected.nix")
-    ];
+  imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
   boot.initrd.availableKernelModules = [ "nvme" "xhci_pci" "ahci" "usbhid" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
 
-  fileSystems."/" =
-    {
-      device = "/dev/disk/by-uuid/4b527fdb-103a-4632-baa4-4e7f6d42ef76";
-      fsType = "btrfs";
-      options = [ "subvol=root" ];
-    };
+  fileSystems."/" = {
+    device = "/dev/disk/by-uuid/4b527fdb-103a-4632-baa4-4e7f6d42ef76";
+    fsType = "btrfs";
+    options = [ "subvol=root" ];
+  };
 
-  fileSystems."/nix" =
-    {
-      device = "/dev/disk/by-uuid/4b527fdb-103a-4632-baa4-4e7f6d42ef76";
-      fsType = "btrfs";
-      options = [ "subvol=nix" ];
-    };
+  fileSystems."/nix" = {
+    device = "/dev/disk/by-uuid/4b527fdb-103a-4632-baa4-4e7f6d42ef76";
+    fsType = "btrfs";
+    options = [ "subvol=nix" ];
+  };
 
-  fileSystems."/home" =
-    {
-      device = "/dev/disk/by-uuid/4b527fdb-103a-4632-baa4-4e7f6d42ef76";
-      fsType = "btrfs";
-      options = [ "subvol=home" ];
-    };
+  fileSystems."/home" = {
+    device = "/dev/disk/by-uuid/4b527fdb-103a-4632-baa4-4e7f6d42ef76";
+    fsType = "btrfs";
+    options = [ "subvol=home" ];
+  };
 
-  fileSystems."/boot" =
-    {
-      device = "/dev/disk/by-uuid/82B7-E8DB";
-      fsType = "vfat";
-      options = [ "fmask=0077" "dmask=0077" ];
-    };
+  fileSystems."/boot" = {
+    device = "/dev/disk/by-uuid/BDE0-211E";
+    fsType = "vfat";
+    options = [ "fmask=0077" "dmask=0077" ];
+  };
 
-  fileSystems."/swap" =
-    {
-      device = "/dev/disk/by-uuid/4b527fdb-103a-4632-baa4-4e7f6d42ef76";
-      fsType = "btrfs";
-      options = [ "subvol=swap" ];
-    };
+  fileSystems."/swap" = {
+    device = "/dev/disk/by-uuid/4b527fdb-103a-4632-baa4-4e7f6d42ef76";
+    fsType = "btrfs";
+    options = [ "subvol=swap" ];
+  };
+
+  fileSystems."/media/little-one" = {
+    device = "/dev/disk/by-uuid/0d7599ec-428b-4b0b-9f22-1fccd9feed17";
+    fsType = "ext4";
+  };
 
   swapDevices = [{ device = "/swap/swapfile"; }];
 
@@ -61,5 +58,6 @@
   # networking.interfaces.wlp5s0.useDHCP = lib.mkDefault true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+  hardware.cpu.amd.updateMicrocode =
+    lib.mkDefault config.hardware.enableRedistributableFirmware;
 }

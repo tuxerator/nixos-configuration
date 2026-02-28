@@ -9,14 +9,20 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    hyprland.url = "github:hyprwm/Hyprland";
+    hyprland = {
+      url = "github:hyprwm/Hyprland";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    musnix = { url = "github:musnix/musnix"; };
+    musnix = {
+      url = "github:musnix/musnix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
   };
 
@@ -24,9 +30,7 @@
     nixosConfigurations = {
       "carrie" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        modules = [
-          ./carrie.nix
-        ];
+        modules = [ ./carrie.nix ];
       };
 
       "carrie2" = nixpkgs.lib.nixosSystem {
@@ -41,17 +45,12 @@
       "knime-thickPad" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = { inherit inputs; };
-        modules = [
-          ./knime-thickPad.nix
-        ];
+        modules = [ ./knime-thickPad.nix ];
       };
-      
+
       "thickPad" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        modules = [
-          sops-nix.nixosModules.sops
-         ./thickPad.nix
-        ];
+        modules = [ sops-nix.nixosModules.sops ./thickPad.nix ];
       };
     };
   };

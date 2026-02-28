@@ -3,15 +3,17 @@
 let
   cfg = config;
   inherit (lib) mkOption;
-in
-{
+in {
   options = {
     user = {
       name = mkOption { type = lib.types.str; };
       username = mkOption { type = lib.types.str; };
       email = mkOption { type = lib.types.str; };
       phone = mkOption { type = lib.types.str; };
-      shell = mkOption { default = pkgs.zsh; type = lib.types.package; };
+      shell = mkOption {
+        default = pkgs.zsh;
+        type = lib.types.package;
+      };
     };
   };
 
@@ -21,7 +23,7 @@ in
     users.users.${cfg.user.username} = {
       uid = 1000;
       isNormalUser = true;
-      extraGroups = [ "wheel" "adbusers" "audio" "jackaudio" "video" ];
+      extraGroups = [ "wheel" "adbusers" "audio" "jackaudio" "video" "render" "libvirtd" ];
       description = cfg.user.name;
       shell = cfg.user.shell;
     };
